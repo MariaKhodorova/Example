@@ -1,0 +1,13 @@
+from settings import settings
+class test_settings(unittest.TestCase):
+
+# Проверить корректность заполнения поля
+def test_check_first_name(self):
+# Подготовка
+item = settings()
+
+# Действие
+item.first_name = "a "
+
+# Проверка
+assert item.first_name == "a"
