@@ -1,19 +1,25 @@
-from abc import ABC, abstractmethod
-from Src.settings import settings
-from Src.exceptions import exception_proxy, operation_exception
+import abc
 from Src.errors import error_proxy
+from Src.exceptions import exception_proxy
 
-
-#
-# Абстрактный класс для конвертации
+# 
+# Абстрактный класс для наследования.
+# Используется для формирования набора словарей. 
 #
 class convertor(error_proxy):
     
-    @abstractmethod
-    def convert(self, field: str, object) -> dict:
-        # Данный метод возвращает словарь в формате ключ - наименование поля, значение - данные поля
+    @abc.abstractmethod
+    def serialize(self, field: str, object) -> dict:
+        """
+            Сконвертировать объект в словарь
+        Args:
+            source (_type_): Любой тип данных
+        """
         exception_proxy.validate(field, str)
+        self.clear()
+         
         
         
-
-
+        
+        
+    

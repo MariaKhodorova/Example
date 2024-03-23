@@ -14,5 +14,3 @@ class group_model(reference):
         item = group_model("Ингредиенты")
         return item
     
-
-    

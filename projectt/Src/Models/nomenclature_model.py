@@ -48,4 +48,7 @@ class nomenclature_model(reference):
     def unit(self, value: reference):
         " Единица измерения "
         exception_proxy.validate(value, reference)
-        self._unit = value    
+        self._unit = value
+        
+  
+    

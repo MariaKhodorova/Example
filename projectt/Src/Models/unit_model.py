@@ -1,6 +1,8 @@
 from Src.reference import reference
 from Src.exceptions import exception_proxy, argument_exception
 
+
+
 #
 # Модель единицы измерения для номенклатуры
 #
@@ -21,16 +23,16 @@ class unit_model(reference):
         if coeff != 1:
             self.coefficient = coeff   
         
-        
+    
     @property
-    def base_unit(self):
+    def base_unit(self) -> reference:
         """
             Базовая единица измерения
         Returns:
             _type_: _description_
         """
         return self.__base_unit
-    
+
     
     @base_unit.setter
     def base_unit(self, value: reference ):

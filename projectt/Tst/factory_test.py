@@ -1,4 +1,3 @@
-from Src.Models.unit_model import unit_model
 from Src.Logics.start_factory import start_factory
 from Src.settings_manager import settings_manager
 from Src.Storage.storage import storage
@@ -11,22 +10,42 @@ import unittest
 # 
 class factory_test(unittest.TestCase):
 
+    # 
+    # Проверить метод storage_keys в хранилище
+    #
+    def test_check_method_storage_keys(self):
+        # Подготовка
+        manager = settings_manager()
+        start = start_factory( manager.settings )
+        start.create()
+        
+        # Действия
+        result = start.storage.storage_keys( start.storage  )
+        
+        # Проверки
+        assert result is not None
+        assert len(result) > 0
+     
+    #
+    # Проверка работы фабрики для построения отчетности
+    #
     def test_check_report_factory_create(self):
         # Подготовка
         manager = settings_manager()
-
         start = start_factory( manager.settings )
-        factory = report_factory()
-        #создаем данные
         start.create()
+        factory = report_factory()
         key = storage.unit_key()
 
-        #Действие
-        result = factory.create("csv", start.storage.data[key])
-
-        #Проверка
-        assert result is not None
-
+        # Действие
+        report = factory.create( 
+                                manager.settings.report_mode, 
+                                start.storage.data)
+        
+        # Проверки
+        assert report is not None
+        print ( report.create(key) )
+ 
     #
     # Проверка создания начальных рецептов
     #    
@@ -94,34 +113,14 @@ class factory_test(unittest.TestCase):
         if manager.settings.is_first_start == True:
             assert result == True
             assert not factory.storage is None
-            assert storage.nomenclature_key in factory.storage.data
-            assert storage.receipt_key in factory.storage.data
-            assert storage.group_key in factory.storage.data
-            assert storage.unit_key in factory.storage.data
+            assert storage.nomenclature_key() in factory.storage.data
+            assert storage.receipt_key() in factory.storage.data
+            assert storage.group_key() in factory.storage.data
+            assert storage.unit_key() in factory.storage.data
+            assert storage.storage_transaction_key() in factory.storage.data
         else:
             assert result == False    
         
-
-    #      
-    # Проверка работы класса start_factory. Метод saveAs
-    #
-    def test_check_factory_saveAs(self):     
-        #Подготовка
-        manager = settings_manager()
-        manager.open("test.json")
-        st = storage()
-        factory = start_factory( manager.settings, st )
-
-        gr = factory.create_groups()
-        st.data[storage.group_key()] = gr
-
-        #Действие
-        init=factory.create()
-        result = factory.saveAs('', storage.group_key())
-
-
-        #Проверка
-
-        assert result[0:1] == "i"
+                     
         
        

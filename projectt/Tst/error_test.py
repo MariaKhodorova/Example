@@ -7,7 +7,7 @@ import unittest
 class error_proxy_test(unittest.TestCase):
     
     #
-    # Проверить простой способ  создания объекта с ошибкой
+    # Проверить простой сбособ  создания объекта с ошибкой
     #
     def test_create_error_proxy(self):
         # Подготовка
