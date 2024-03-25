@@ -1,7 +1,9 @@
 from Src.exceptions import argument_exception
 from Src.errors import error_proxy
+from Src.Models.storage_row_model import storage_row_model
 from datetime import datetime
-
+from Src.reference import reference
+from Src.Models.storage_model import storage_model
 
 #
 # Прототип для обработки складских транзакций
@@ -44,11 +46,11 @@ class storage_prototype(error_proxy):
         return   storage_prototype( result )
     
     
-    def filter_nomenclature(self, nomenclature_id):
+    def filter_nomenclature(self, id: str):
         """
-            Отфильтровать по номенклатуре
+            Отфильтровать по номенклатуре (свойство транзакции)
         Args:
-            nomenclature_id: id номенклатуры
+            id: str
 
         Returns:
             storage_prototype: _description_
@@ -61,17 +63,17 @@ class storage_prototype(error_proxy):
 
         result = []
         for item in self.__data:
-            if item.nomenclature_id == nomenclature_id:
+            if item.nomenclature.id == id:
                 result.append(item)
 
         return   storage_prototype( result )
     
     
-    def filter_receipes(self, receipe_id):
+    def filter_receipes(self, receipe: reference):
         """
-            Отфильтровать данные по рецепту
+            Отфильтровать данные по рецепту (номенклатуре рецепта)
         Args:
-            receipe_id: str 
+            receipe: reference
 
         Returns:
             storage_prototype: _description_
@@ -81,14 +83,38 @@ class storage_prototype(error_proxy):
 
         if not self.is_empty:
             return self.__data
+        
+        nomens = []
+        for item in receipe.consist.values():
+            nomens.append(item.nomenclature.id)
 
         result = []
         for item in self.__data:
-            if item.storage_key == receipe_id:
+            if item.nomenclature.id in nomens:
                 result.append(item)
-
+        
         return   storage_prototype( result )
     
+    def filter_by_storage(self, storage: storage_model):
+        """
+            Отфильтровать данные по рецепту (по адрессу склада)
+        Args:
+            receipe: reference
+
+        Returns:
+            storage_prototype: _description_
+        """
+        if len(self.__data) <= 0:
+            self.error = "Некорректно переданы параметры!"
+
+
+        if not self.is_empty:
+            return self.__data
+
+        result = []
+        for item in self.__data:
+            if item.storage.address == storage.address:
+                result.append(item)  
     
     @property
     def data(self):

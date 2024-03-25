@@ -1,7 +1,9 @@
 from Src.Logics.convert_factory import convert_factory
 from Src.Logics.process_factory import process_factory
 from Src.Logics.storage_prototype import storage_prototype
-from Src.exceptions import argument_exception, exception_proxy
+from Src.exceptions import argument_exception, exception_proxy, operation_exception
+from Src.Models.storage_model import storage_model
+from Src.Models.receipe_model import receipe_model
 from datetime import datetime
 import json
 
@@ -69,28 +71,26 @@ class storage_service:
         turns = processing().process( filtred_data )
         return turns
     
-    def create_turns_receipes(self, receipe_id: str) -> dict:
+    def create_turns_receipes(self, receipe: receipe_model, storage: storage_model):
         """
             проверка возможности списания, формирования списка транзакций на списание согласно рецепту
         Args:
-            receipe_id: str
+            receipe: receipe_model
+            storage: storage_model
         Returns:
             dict: _description_
         """
-        exception_proxy.validate(receipe_id, str)
-
-        if len(receipe_id) <= 0:
-            raise argument_exception("Некорректно переданы параметры!")
 
         # Фильтруем
         prototype = storage_prototype( self.__data )
-        filtred_data = prototype.filter_receipes( receipe_id )
-        filtred_data = prototype.filter( filtred_data )
-        filtred_data = prototype.filter_nomenclature( filtred_data )
+        filtred_data = prototype.filter_receipes( receipe )
+        filtred_data = prototype.filter_storage( storage )
+        if len(self.__data) != len(filter.data):
+            raise operation_exception("Отсутствует на складе")
 
         # Подобрать процессинг  
-        key_turn = process_factory.turn_key()
-        processing = process_factory().create( key_turn )
+        transaction_key = process_factory.transaction_key()
+        processing = process_factory().create( transaction_key )
 
         # Обороты
         turns = processing().process( filtred_data )

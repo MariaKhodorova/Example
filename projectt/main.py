@@ -71,10 +71,10 @@ def get_turns_nomenclature(nomenclature_id):
     return result
 
 @app.route("/api/storage/<receipt_id>/debits", methods=["GET"])
-def get_turns_receipes(receipe_id):
+def get_turns_receipes():
     
     source_data = start.storage.data[  storage.storage_transaction_key()  ]
-    data = storage_service(  source_data  ).create_turns_receipes( receipe_id )
+    data = storage_service(  source_data  ).create_turns_receipes( receipe, storage )
     result = storage_service.create_response( data, app )
 
     return result
