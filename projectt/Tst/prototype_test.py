@@ -28,8 +28,7 @@ class prototype_test(unittest.TestCase):
         
         # Проверка
         assert isinstance( result, storage_prototype )
-        assert prototype.is_empty
-        assert len(result) > 0
+        assert len(result.data) > 0
 
 
     def test_check_filter_nomenclature(self):
@@ -44,12 +43,12 @@ class prototype_test(unittest.TestCase):
         id = start.storage.data[storage.nomenclature_key()][0].id
 
         # Действие
-        result = result.filter_by_nomenclature( id )
+        result = prototype.filter_nomenclature( id )
 
         # Проверка
         assert isinstance( result, storage_prototype )
-        assert prototype.is_empty
-        assert len(result) > 0
+        assert result.is_empty
+        assert len(result.data) > 0
 
     def test_storage_service(self):
        # Подготовка
@@ -67,7 +66,8 @@ class prototype_test(unittest.TestCase):
         service = storage_service(data)
         
         # Дейтсвие
-        filtered = service.create_turns_by_nomen(start_date, stop_date, id)
+
+        filtered = service.create_turns(start_date,stop_date)
         
         # Проверка
         print(filtered)
@@ -76,7 +76,7 @@ class prototype_test(unittest.TestCase):
         assert isinstance(filtered, list)
 
 
-    def test_service_transactions(self):
+    def test_create_turns_receipes(self):
             # Подготовка
             manager = settings_manager()
             start = start_factory(manager.settings)
@@ -88,7 +88,7 @@ class prototype_test(unittest.TestCase):
             storage_ = data[0].storage
             
             # Дейтсвие
-            result = service.create_transactions(receipt, storage_)
+            result = service.create_turns_receipes(receipt, storage_)
             
             # Проверка
             print(result)

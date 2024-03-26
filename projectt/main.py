@@ -8,6 +8,7 @@ from datetime import datetime
 from Src.Logics.storage_service import storage_service
 from Src.Logics.storage_prototype import storage_prototype
 from Src.Logics.storage_service import storage_service
+from Src.Models.storage_model import storage_model
 
 
 app = Flask(__name__)
@@ -71,11 +72,16 @@ def get_turns_nomenclature(nomenclature_id):
     return result
 
 @app.route("/api/storage/<receipt_id>/debits", methods=["GET"])
-def get_turns_receipes():
-    
+def get_turns_receipes(receipt_id):
+    args = request.args
+    # storage_id=args['storage_id']
+    q=start_factory.create_receipts()
+    print(q)
+    receipt =[i for i in q if i.id==receipt_id]
+    storage_=storage_model.create_default()
     source_data = start.storage.data[  storage.storage_transaction_key()  ]
-    data = storage_service(  source_data  ).create_turns_receipes( receipe, storage )
-    result = storage_service.create_response( data, app )
+    data = storage_service(  source_data  ).create_turns_transaction( receipt, storage_ )
+    result = storage_service.create_response( {"seccses":True}, app )
 
     return result
       

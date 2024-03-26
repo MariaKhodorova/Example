@@ -71,7 +71,7 @@ class storage_prototype(error_proxy):
     
     def filter_receipes(self, receipe: reference):
         """
-            Отфильтровать данные по рецепту (номенклатуре рецепта)
+            Отфильтровать данные по рецепту
         Args:
             receipe: reference
 
@@ -95,11 +95,11 @@ class storage_prototype(error_proxy):
         
         return   storage_prototype( result )
     
-    def filter_by_storage(self, storage: storage_model):
+    def filter_storage(self, storage: storage_model):
         """
-            Отфильтровать данные по рецепту (по адрессу склада)
+            Отфильтровать номенклатуру рецепта по адрессу склада
         Args:
-            receipe: reference
+            storage: storage_model
 
         Returns:
             storage_prototype: _description_
@@ -115,6 +115,9 @@ class storage_prototype(error_proxy):
         for item in self.__data:
             if item.storage.address == storage.address:
                 result.append(item)  
+                
+        return   storage_prototype( result )
+        
     
     @property
     def data(self):
